@@ -1,0 +1,18 @@
+#start-info {
+    display:inline-block;
+    padding:0;
+}
+
+#visualization {
+    margin:10px;
+}
+
+#visualization > div {
+
+    text-align: center;
+    display:inline-block;
+    justify-content: center;
+    border:2px solid black;
+    height: 50px;
+    width: 50px;
+}
