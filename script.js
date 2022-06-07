@@ -22,9 +22,42 @@ function calculate_midpoint(array) {
 }
 
 user_array = prompt('enter an sorted array   e.g. 2,3,5,8 :',)
-
 var as_arr = user_array.split(',')    //e.g ['2','3','5','8']
 const og_array = user_array.split(',') 
+
+//check if array is sorted
+const ordered_arr = as_arr.sort(function(a,b) {
+    if(parseInt(a)>parseInt(b)) {
+        return 1;
+    } else {
+        return -1
+    }
+})
+function sort() {
+    let matching = 0
+    for (let i=0;i<ordered_arr.length;i++) {
+        if(ordered_arr[i] == og_array[i]) {
+            matching += 1
+        }
+    }
+    if (matching == ordered_arr.length) {
+        return true //user array is sorted
+    }
+}
+if (sort()) {
+    body()
+} else {
+    alert('your array is not sorted,enter a sorted one')
+    user_array = prompt('enter an sorted array   e.g. 2,3,5,8 :',)
+    var as_arr = user_array.split(',')    //e.g ['2','3','5','8']
+    const og_array = user_array.split(',')
+    body()  
+
+}
+
+
+
+
 
 
 const array_html = document.querySelector("#your_array")
@@ -34,80 +67,84 @@ user_target = prompt(`enter a target:               your array is: [${as_arr}]`)
 const target_html = document.querySelector('#your_target')
 target_html.innerHTML = `Your target is:  ${user_target}`
 
-const button = document.querySelector('#start')
+//main function
+function body() {
 
-function removeHalf() {
-    
-    if (parseInt(user_target) > as_arr[calculate_midpoint(as_arr)]) {
-        as_arr = as_arr.splice(midpoint_vis+1,as_arr.length)
-        
-        //remove all divs from visualization in order to make shorter, splitted array
-        $('#visualization').children('div').each(function () {
-            console.log(this.remove()); 
-        });
-        clickFunction()
-    } else if (parseInt(user_target) < as_arr[calculate_midpoint(as_arr)]) {
-        as_arr = as_arr.splice(0,midpoint_vis)
-        
-        //remove all divs from visualization in order to make shorter, splitted array
-        $('#visualization').children('div').each(function () {
-            console.log(this.remove()); 
-        });
-        clickFunction()
+    const button = document.querySelector('#start')
 
-    }
-}
-
-function real_index() {
-    return og_array.indexOf(user_target)
-}
-
-function clickFunction() {
-    // make midpoint block yelllow
-    for (element in as_arr) {
-        const vis = document.querySelector('#visualization')
-        const block_div = document.createElement('div')
-        var inside = document.createTextNode(as_arr[element])
-        var list = document.querySelector('#list')
+    function removeHalf() {
         
-        midpoint_vis=calculate_midpoint(as_arr)
-        
-        if (element == midpoint_vis) {
-            if (as_arr[element] == parseInt(user_target)) {     //check if midpoint is equal to target
-                const paragraph = document.querySelector('#start-info')
-                const par = document.createElement('p')
-                const ins = document.createTextNode('if you got it at the first try, try something longer')
-                par.appendChild(ins)
-                paragraph.appendChild(par)
-                
-                block_div.style['background-color']='green'     
-                var event_item = document.createElement('li')
-                event_item.appendChild(document.createTextNode(`target found at index ${real_index()}`))
-                alert(`target found at index ${real_index()}`)
-                list.appendChild(event_item)
-
-            } else {
-                block_div.style['background-color']='yellow';
-            }
-        
-            var event_item = document.createElement('li')
-            if (element > 1) {
-                event_item.appendChild(document.createTextNode(`midpoint found at index ${element}, click 'next step' to split an array`))
-                list.appendChild(event_item)
-            }
+        if (parseInt(user_target) > as_arr[calculate_midpoint(as_arr)]) {
+            as_arr = as_arr.splice(midpoint_vis+1,as_arr.length)
             
-            button.innerHTML = 'Next step'
-            button.removeEventListener('click',clickFunction)
-            button.addEventListener('click',removeHalf)
+            //remove all divs from visualization in order to make shorter, splitted array
+            $('#visualization').children('div').each(function () {
+                console.log(this.remove()); 
+            });
+            clickFunction()
+        } else if (parseInt(user_target) < as_arr[calculate_midpoint(as_arr)]) {
+            as_arr = as_arr.splice(0,midpoint_vis)
+            
+            //remove all divs from visualization in order to make shorter, splitted array
+            $('#visualization').children('div').each(function () {
+                console.log(this.remove()); 
+            });
+            clickFunction()
 
         }
-        block_div.appendChild(inside)
-        vis.appendChild(block_div)
     }
+
+    function real_index() {
+        return og_array.indexOf(user_target)
+    }
+
+    function clickFunction() {
+        // make midpoint block yelllow
+        for (element in as_arr) {
+            const vis = document.querySelector('#visualization')
+            const block_div = document.createElement('div')
+            var inside = document.createTextNode(as_arr[element])
+            var list = document.querySelector('#list')
+            
+            midpoint_vis=calculate_midpoint(as_arr)
+            
+            if (element == midpoint_vis) {
+                if (as_arr[element] == parseInt(user_target)) {     //check if midpoint is equal to target
+                    const paragraph = document.querySelector('#start-info')
+                    const par = document.createElement('p')
+                    const ins = document.createTextNode('if you got it at the first try, try something longer')
+                    par.appendChild(ins)
+                    paragraph.appendChild(par)
+
+                    block_div.style['background-color']='green'     
+                    var event_item = document.createElement('li')
+                    event_item.appendChild(document.createTextNode(`target found at index ${real_index()}`))
+                    alert(`target found at index ${real_index()}`)
+                    list.appendChild(event_item)
+                    
+
+                } else {
+                    block_div.style['background-color']='yellow';
+                }
+            
+                var event_item = document.createElement('li')
+                if (element > 1) {
+                    event_item.appendChild(document.createTextNode(`midpoint found at index ${element}, click 'next step' to split an array`))
+                    list.appendChild(event_item)
+                }
+                
+                button.innerHTML = 'Next step'
+                button.removeEventListener('click',clickFunction)
+                button.addEventListener('click',removeHalf)
+
+            }
+            block_div.appendChild(inside)
+            vis.appendChild(block_div)
+        }
+    }
+
+
+    button.addEventListener('click',clickFunction)
 }
-
-
-button.addEventListener('click',clickFunction)
-
 
 
